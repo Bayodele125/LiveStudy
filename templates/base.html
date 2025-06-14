@@ -1,0 +1,30 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Study Life{% endblock title %}</title>
+    <link rel="stylesheet" href="{% static 'your_app_name/style.css' %}" />
+    {% block extra_head %}{% endblock extra_head %}
+</head>
+<body>
+    <header>
+        <h1>Study Life</h1>
+    </header>
+    <nav>
+        <a href="{% url 'home' %}">Home</a>
+        <!-- Future nav links -->
+    </nav>
+
+    <main class="container">
+        {% block content %}
+        {% endblock content %}
+    </main>
+
+    <footer>
+        &copy; {{ now|date:"Y" }} Study Life - University Project
+    </footer>
+</body>
+</html>

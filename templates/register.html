@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<h2>Create a new account</h2>
+
+<form method="post" novalidate class="auth-form">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="form-group">
+        <label for="{{ form.email.id_for_label }}">Email</label>
+        <input type="email" name="{{ form.email.html_name }}" id="{{ form.email.id_for_label }}"
+               value="{{ form.email.value|stringformat:'s' }}"
+               required class="form-control {% if form.email.errors %}is-invalid{% endif %}" autofocus>
+        {% for error in form.email.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.name.id_for_label }}">Full Name</label>
+        <input type="text" name="{{ form.name.html_name }}" id="{{ form.name.id_for_label }}"
+               value="{{ form.name.value|stringformat:'s' }}"
+               required class="form-control {% if form.name.errors %}is-invalid{% endif %}">
+        {% for error in form.name.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.student_id.id_for_label }}">Student ID</label>
+        <input type="text" name="{{ form.student_id.html_name }}" id="{{ form.student_id.id_for_label }}"
+               value="{{ form.student_id.value|stringformat:'s' }}"
+               required class="form-control {% if form.student_id.errors %}is-invalid{% endif %}">
+        {% for error in form.student_id.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.major.id_for_label }}">Major</label>
+        <input type="text" name="{{ form.major.html_name }}" id="{{ form.major.id_for_label }}"
+               value="{{ form.major.value|stringformat:'s' }}"
+               required class="form-control {% if form.major.errors %}is-invalid{% endif %}">
+        {% for error in form.major.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.year.id_for_label }}">Year</label>
+        <input type="number" name="{{ form.year.html_name }}" id="{{ form.year.id_for_label }}"
+               value="{{ form.year.value|stringformat:'s' }}"
+               min="1" max="10" required class="form-control {% if form.year.errors %}is-invalid{% endif %}">
+        {% for error in form.year.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.profile_picture_url.id_for_label }}">Profile Picture URL (optional)</label>
+        <input type="url" name="{{ form.profile_picture_url.html_name }}" id="{{ form.profile_picture_url.id_for_label }}"
+               value="{{ form.profile_picture_url.value|stringformat:'s' }}"
+               class="form-control {% if form.profile_picture_url.errors %}is-invalid{% endif %}">
+        {% for error in form.profile_picture_url.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.password1.id_for_label }}">Password</label>
+        <input type="password" name="{{ form.password1.html_name }}" id="{{ form.password1.id_for_label }}"
+               required class="form-control {% if form.password1.errors %}is-invalid{% endif %}">
+        {% for error in form.password1.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
+        <input type="password" name="{{ form.password2.html_name }}" id="{{ form.password2.id_for_label }}"
+               required class="form-control {% if form.password2.errors %}is-invalid{% endif %}">
+        {% for error in form.password2.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Register</button>
+</form>
+
+<p class="mt-3">Already have an account? <a href="{% url 'login' %}">Login here</a>.</p>
+{% endblock %}
