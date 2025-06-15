@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- instructor_profile.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    {% block title %} {{ instructor.name.get_full_name }} | Instructor Profile {% endblock title %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        .profile-container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+        }
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 20px;
+            border: 2px solid #ccc;
+        }
+        .profile-details h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .profile-details p.email {
+            color: #555;
+            font-size: 14px;
+        }
+        .bio {
+            margin-top: 20px;
+        }
+        .social-media {
+            margin-top: 20px;
+        }
+        .social-media a {
+            margin-right: 15px;
+            color: #0073e6;
+            text-decoration: none;
+        }
+        .social-media a:hover {
+            text-decoration: underline;
+        }
+    </style>
+<div class="profile-container">
+    <div class="profile-header">
+        {% if instructor.profile_picture_url %}
+            <img src="{{ instructor.profile_picture_url }}" alt="Profile Picture" class="profile-picture">
+        {% else %}
+            <img src="https://via.placeholder.com/120" alt="No Profile Picture" class="profile-picture">
+        {% endif %}
+        <div class="profile-details">
+            <h1>{{ instructor.name.get_full_name }}</h1>
+            <p class="email">{{ instructor.email }}</p>
+        </div>
+    </div>
+
+    {% if instructor.bio %}
+        <div class="bio">
+            <h2>About</h2>
+            <p>{{ instructor.bio }}</p>
+        </div>
+    {% endif %}
+
+    {% if instructor.social_media_links %}
+        <div class="social-media">
+            <h2>Connect with me</h2>
+            {% for platform, url in instructor.social_media_links.items %}
+                <a href="{{ url }}" target="_blank">{{ platform|title }}</a>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+{% endblock %}

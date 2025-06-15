@@ -33,43 +33,51 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(unique=True)
-    # required fields for the project student info
-    name = models.CharField(max_length=100)
-    student_id = models.CharField(max_length=20, unique=True)
-    major = models.CharField(max_length=100)
-    year = models.PositiveSmallIntegerField()
+    
+    user_id = models.CharField(max_length=20, unique=True, primary_key=True)
 
-    # Optional profile picture URL
+    # required fields for the project student info
+    email = models.EmailField(unique=True)
+    name = models.CharField(max_length=100)
+
+    # Optional fields for additional user information
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
+    date_of_birth = models.DateField(blank=True, null=True)
+
+    # Optional profile picture URL & major
     profile_picture_url = models.URLField(blank=True, null=True)
+    major = models.CharField(max_length=100, blank=True, null=True)
 
     # Django user flags
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+
+    # Custom flags for student/instructor roles
+    is_student = models.BooleanField(default=False)
+    is_instructor = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name', 'student_id']
+    USERNAME_FIELD = 'user_id'
+    REQUIRED_FIELDS = ['name', 'email']
 
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.email
+        return self.user_id
     
 class InstructorProfile(models.Model):
-    id = models.CharField(max_length=10, primary_key=True)  # e.g., 'I123'
-    name = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='instructors')
-    email = models.EmailField(unique=True)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='instructors')
     bio = models.TextField(blank=True, null=True)
     social_media_links = models.JSONField(blank=True, null=True)  # e.g., {'twitter': 'https://twitter.com/instructor'}
     profile_picture_url = models.URLField(blank=True, null=True)  # URL to the instructor's profile picture
 
 
     def __str__(self):
-        return self.name
-    
+        return self.user.name
+
 class StudentProfile(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='profile')
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='students')
     bio = models.TextField(blank=True, null=True)
     social_media_links = models.JSONField(blank=True, null=True)  # e.g., {'twitter': 'https://twitter.com/student'}
     profile_picture_url = models.URLField(blank=True, null=True)  # URL to the student's profile picture

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +22,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(lptz&tpbsupc3la_k%38)=t)mll$35&60l2)4ew(hvl&$tx%l'
+SECRET_KEY = config('SECRET_KEY')
+APPID = config('appID')
+SERVERSECRET = config('serverSecret')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -41,6 +44,8 @@ INSTALLED_APPS = [
     'Account',  # Custom user app
     'core',  # Core app for main functionality
     'rest_framework',  # Django REST Framework for API support
+    'meeting',  # App for meeting functionality
+    'channels',  # For WebSocket support
 ]
 
 MIDDLEWARE = [
@@ -124,11 +129,28 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),  # Directory for custom static files
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Directory for collected static files
+# Media files (user-uploaded content)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Directory for media files
 
 # Default User Model
 AUTH_USER_MODEL = 'Account.CustomUser'
+LOGIN_URL = 'login'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Use ASGI instead of WSGI
+ASGI_APPLICATION = 'LiveStudy.asgi.application'
+
+# Channel layers for real-time communication (using in-memory layer for dev)
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+        # For production use Redis:
+        # "BACKEND": "channels_redis.core.RedisChannelLayer",
+        # "CONFIG": {"hosts": [("127.0.0.1", 6379)]},
+    },
+}

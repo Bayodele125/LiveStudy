@@ -26,5 +26,7 @@
     <footer>
         &copy; {{ now|date:"Y" }} Study Life - University Project
     </footer>
+    <script src="{% static 'script.js' %}"></script>
+    {% block extra_scripts %}{% endblock extra_scripts %}
 </body>
 </html>
